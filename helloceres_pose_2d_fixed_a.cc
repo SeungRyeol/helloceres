@@ -41,12 +41,14 @@ using ceres::Problem;
 using ceres::Solver;
 using ceres::Solve;
 
-class Pose2dErrorTerm{
-  public:
+class Pose2dErrorTerm
+{
+public:
   Pose2dErrorTerm(double measured[])
-  :p_measured(measured[0], measured[1]), theta_measured(measured[2]) {}
+      :p_measured(measured[0], measured[1]), theta_measured(measured[2]) {}
 
-  template <typename T> bool operator()(const T* const a, const T* const b, T* residual) const {
+  template <typename T> bool operator()(const T* const a, const T* const b, T* residual) const
+  {
     const Eigen::Matrix<T, 2, 1> p_a(a[0], a[1]);
     const Eigen::Matrix<T, 2, 1> p_b(b[0], b[1]);
     
@@ -73,7 +75,7 @@ class Pose2dErrorTerm{
     residual[5] = 0.523599000001 - a[2];
     return true;
   }
-  private:
+private:
   const Eigen::Vector2d p_measured;
 
   double theta_measured;
@@ -82,7 +84,6 @@ class Pose2dErrorTerm{
 int main(int argc, char** argv) {
   google::InitGoogleLogging(argv[0]);
 
-  
   double * a = (double *)malloc(3*sizeof(double));
   a[0] = 3.0;
   a[1] = 1.0;

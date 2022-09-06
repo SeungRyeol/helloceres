@@ -43,12 +43,14 @@ using ceres::Solve;
 
 
 // 연습. 두 2D 상의 pose들 optimization해보기
-class Pose2dErrorTerm{
-  public:
+class Pose2dErrorTerm
+{
+public:
   Pose2dErrorTerm(double measured[])
-  :p_measured(measured[0], measured[1]), theta_measured(measured[2]) {}
+      :p_measured(measured[0], measured[1]), theta_measured(measured[2]) {}
 
-  template <typename T> bool operator()(const T* const a, const T* const b, T* residual) const {
+  template <typename T> bool operator()(const T* const a, const T* const b, T* residual) const
+  {
     // 참고로 값들을 그냥 double로 받으면 타입이 안 맞다고 에러가 뜸!
     // 값들이 ceres::Jet<double, 6>이라는 타입이 되기 때문인 것 같음
     // double x_ab = b[0] - a[0];
@@ -66,7 +68,7 @@ class Pose2dErrorTerm{
     const T cos = ceres::cos(a[2]);
     const T sin = ceres::sin(a[2]);
     R_a << cos, -sin,
-           sin, cos;
+        sin, cos;
     
     // 2D pose error terms. 각각 position과 각도에 대한 error를 구함
     const Eigen::Matrix<T, 2, 1> p_diff = R_a.transpose() * (p_b - p_a) - p_measured.cast<T>();
@@ -77,13 +79,14 @@ class Pose2dErrorTerm{
     residual[2] = theta_diff;
     return true;
   }
-  private:
+private:
   const Eigen::Vector2d p_measured;
 
   double theta_measured;
 };
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
   google::InitGoogleLogging(argv[0]);
 
   // The variable to solve for with its initial value. It will be
